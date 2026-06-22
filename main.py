@@ -207,7 +207,7 @@ def main():
     rtc_configuration={
         "iceServers": [
             {"urls": ["stun:stun.l.google.com:19302"]},
-            {"urls": ["turn:your-turn-server:3478"], "username": "user", "credential": "pass"}
+            # {"urls": ["turn:your-turn-server:3478"], "username": "user", "credential": "pass"}
         ]
     },
     media_stream_constraints={
@@ -228,11 +228,11 @@ def main():
         #     },
         #     async_processing=True
         # )
-
+        
         sync_metrics_update(context)
 
         if context.state.playing:
-            time.sleep(0.25)
+            time.sleep(1)
             st.rerun()
 
         inject_webrtc_styles()
