@@ -13,8 +13,6 @@ from detectors.biceps_curl import BicepsCurlDetector
 from detectors.shoulder_press import ShoulderPressDetector
 from detectors.lunges import LungesDetector
 from services.config.workout_config import POSE_CONNECTIONS
-import os
-os.environ["MEDIAPIPE_DISABLE_GPU"] = "1"
 
 
 class VideoProcessorClass(VideoProcessorBase):
