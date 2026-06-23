@@ -201,60 +201,60 @@ def main():
             unsafe_allow_html=True,
         )
     else:
-        context = None  # ensure context always exists
+    #     context = None  # ensure context always exists
 
-    try:
-        context = webrtc_streamer(
-            key="exercise-analysis",
-            mode=WebRtcMode.SENDRECV,
-            video_processor_factory=VideoProcessorClass,
-            rtc_configuration={
-                "iceServers": [
-                    {"urls": ["stun:stun.l.google.com:19302"]},  # STUN
+    # try:
+    #     context = webrtc_streamer(
+    #         key="exercise-analysis",
+    #         mode=WebRtcMode.SENDRECV,
+    #         video_processor_factory=VideoProcessorClass,
+    #         rtc_configuration={
+    #             "iceServers": [
+    #                 {"urls": ["stun:stun.l.google.com:19302"]},  # STUN
 
-                    # TURN (replace with real values)
-                    {
-                        "urls": "turn:your-server-ip-or-domain:3478",
-                        "username": "your-username",
-                        "credential": "your-password"
-                    }
-                ]
-            },
-            media_stream_constraints={"video": True, "audio": False},
-            async_processing=True
-        )
-    except Exception as e:
-        st.error(f"WebRTC failed to start: {e}")
+    #                 # TURN (replace with real values)
+    #                 {
+    #                     "urls": "turn:your-server-ip-or-domain:3478",
+    #                     "username": "your-username",
+    #                     "credential": "your-password"
+    #                 }
+    #             ]
+    #         },
+    #         media_stream_constraints={"video": True, "audio": False},
+    #         async_processing=True
+    #     )
+    # except Exception as e:
+    #     st.error(f"WebRTC failed to start: {e}")
 
-    if context and context.state.playing:
-        sync_metrics_update(context)
-        time.sleep(0.25)
-        st.rerun()
+    # if context and context.state.playing:
+    #     sync_metrics_update(context)
+    #     time.sleep(0.25)
+    #     st.rerun()
 
-    inject_webrtc_styles()
+    # inject_webrtc_styles()
 
 
 
         
-        # context = webrtc_streamer(
-        #     key="exercise-analysis",
-        #     mode=WebRtcMode.SENDRECV,
-        #     video_processor_factory=VideoProcessorClass,
-        #     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-        #     media_stream_constraints={
-        #         "video": True,
-        #         "audio": False
-        #     },
-        #     async_processing=True
-        # )
+        context = webrtc_streamer(
+            key="exercise-analysis",
+            mode=WebRtcMode.SENDRECV,
+            video_processor_factory=VideoProcessorClass,
+            rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+            media_stream_constraints={
+                "video": True,
+                "audio": False
+            },
+            async_processing=True
+        )
 
-        # sync_metrics_update(context)
+        sync_metrics_update(context)
 
-        # if context.state.playing:
-        #     time.sleep(0.25)
-        #     st.rerun()
+        if context.state.playing:
+            time.sleep(0.25)
+            st.rerun()
 
-        # inject_webrtc_styles()
+        inject_webrtc_styles()
 
     st.divider()
 
