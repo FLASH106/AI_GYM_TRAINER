@@ -1,6 +1,5 @@
 import streamlit as st
 import os
-os.environ["MEDIAPIPE_DISABLE_GPU"] = "1"
 import time
 import pandas as pd
 from services.auth.login_wall import render_login_wall
@@ -16,15 +15,12 @@ from groq import Groq
 from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline, autoplay_audio
-from dotenv import load_dotenv
-load_dotenv()
-
 
   
 def main():
     st.set_page_config(
         page_icon="🏋️‍♀️",
-        page_title="AI GYM Coach",
+        page_title="AI Real-time GYM Coach",
         initial_sidebar_state="expanded",
         layout="centered"
     )
@@ -56,7 +52,7 @@ def main():
     workout_started = st.session_state.get("workout_started", False)
     
     with st.sidebar:
-        st.title("🏋️‍♂️ AI Coach")
+        st.title("🏋️‍♂️ Apna AI Coach")
 
         if st.session_state.username:
             st.caption(f"👤 Login as {st.session_state.username}")
@@ -74,7 +70,7 @@ def main():
 
             st.markdown("")
 
-            start_session_button = st.button("Start Workout", use_container_width=True, key="start_session_button")
+            start_session_button = st.button("Start Workout", width="stretch", key="start_session_button")
 
             if start_session_button:
                 st.session_state.exercise_type = plan_exercise
@@ -105,7 +101,7 @@ def main():
 
             st.info(f"**{exercise}** -- {sets} Sets / {reps} Reps")
 
-            end_session_button = st.button("End Workout", key="end_session_button", use_container_width=True)
+            end_session_button = st.button("End Workout", key="end_session_button", width="stretch")
 
             if end_session_button:
                 st.session_state.workout_started = False
@@ -169,7 +165,7 @@ def main():
                 st.metric("Torso Angle", f"{st.session_state.torso_angle}°")
                 st.metric("Balance Status", st.session_state.balance_status)
 
-    st.title("AI GYM Coach")
+    st.title("AI Real-time GYM Coach")
     st.markdown("#### Real-time pose detection with proactive AI voice coaching")
  
     if st.session_state.get("audio_to_play"):
@@ -201,41 +197,6 @@ def main():
             unsafe_allow_html=True,
         )
     else:
-    #     context = None  # ensure context always exists
-
-    # try:
-    #     context = webrtc_streamer(
-    #         key="exercise-analysis",
-    #         mode=WebRtcMode.SENDRECV,
-    #         video_processor_factory=VideoProcessorClass,
-    #         rtc_configuration={
-    #             "iceServers": [
-    #                 {"urls": ["stun:stun.l.google.com:19302"]},  # STUN
-
-    #                 # TURN (replace with real values)
-    #                 {
-    #                     "urls": "turn:your-server-ip-or-domain:3478",
-    #                     "username": "your-username",
-    #                     "credential": "your-password"
-    #                 }
-    #             ]
-    #         },
-    #         media_stream_constraints={"video": True, "audio": False},
-    #         async_processing=True
-    #     )
-    # except Exception as e:
-    #     st.error(f"WebRTC failed to start: {e}")
-
-    # if context and context.state.playing:
-    #     sync_metrics_update(context)
-    #     time.sleep(0.25)
-    #     st.rerun()
-
-    # inject_webrtc_styles()
-
-
-
-        
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
@@ -286,7 +247,7 @@ def main():
                 "Time (sec)": "sum"
             }).reset_index()
             agg_df.index += 1
-            st.table(agg_df)
+            st.table(agg_df, border="horizontal")
         else:
             st.info("No workout history found.")
 
