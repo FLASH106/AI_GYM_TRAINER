@@ -201,24 +201,11 @@ def main():
             unsafe_allow_html=True,
         )
     else:
-            context = webrtc_streamer(
+        context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration={
-                "iceServers": [
-                    # ✅ Google STUN server (works for most setups)
-                    {"urls": ["stun:stun.l.google.com:19302"]},
-
-                    # ✅ TURN server (optional, only if you have real credentials)
-                    # Replace with your actual TURN server details if available
-                    # {
-                    #     "urls": "turn:your.turn.server:3478",
-                    #     "username": "real_username",
-                    #     "credential": "real_password"
-                    # }
-                ]
-            },
+            rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
             media_stream_constraints={
                 "video": True,
                 "audio": False
@@ -226,16 +213,13 @@ def main():
             async_processing=True
         )
 
-        # Update workout metrics in real time
-    sync_metrics_update(context)
+        sync_metrics_update(context)
 
-        # If the WebRTC stream is active, rerun periodically
-    if context.state.playing:
+        if context.state.playing:
             time.sleep(0.25)
             st.rerun()
 
-        # Inject custom styles for WebRTC components
-    inject_webrtc_styles()
+        inject_webrtc_styles()
 
     st.divider()
 
@@ -270,3 +254,8 @@ def main():
             st.table(agg_df)
         else:
             st.info("No workout history found.")
+
+
+if __name__ == "__main__":
+    main()
+    
