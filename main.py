@@ -209,23 +209,17 @@ def main():
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
             rtc_configuration={
-    "iceServers": [
-        {"urls": ["stun:stun.l.google.com:19302"]},  # STUN
+                "iceServers": [
+                    {"urls": ["stun:stun.l.google.com:19302"]},  # STUN
 
-        # TURN (replace with real values)
-        {
-            "urls": "turn:your-server-ip-or-domain:3478",
-            "username": "your-username",
-            "credential": "your-password"
-        }
-    ]
-}
-
-            # rtc_configuration={
-            #     "iceServers": [
-            #         {"urls": ["stun:stun.l.google.com:19302"]}
-            #     ]
-            # },
+                    # TURN (replace with real values)
+                    {
+                        "urls": "turn:your-server-ip-or-domain:3478",
+                        "username": "your-username",
+                        "credential": "your-password"
+                    }
+                ]
+            },
             media_stream_constraints={"video": True, "audio": False},
             async_processing=True
         )
@@ -238,6 +232,7 @@ def main():
         st.rerun()
 
     inject_webrtc_styles()
+
 
 
         
