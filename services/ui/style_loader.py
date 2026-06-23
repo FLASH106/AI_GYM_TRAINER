@@ -41,12 +41,8 @@ def inject_webrtc_styles():
     with open(font_path, "rb") as font_file:
         encoded_font = base64.b64encode(font_file.read()).decode()
 
-    # Use srcdoc to embed inline HTML/JS safely
-    st.iframe(
-        srcdoc=f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
+    # Inject styles/scripts directly with markdown
+    st.markdown(f"""
         <script>
         (function patchWebRTCStyles() {{
             function injectIntoIframe(iframe) {{
@@ -95,9 +91,4 @@ def inject_webrtc_styles():
             findAndPatch();
         }})();
         </script>
-        </head>
-        <body></body>
-        </html>
-        """,
-        height=0,
-    )
+    """, unsafe_allow_html=True)
