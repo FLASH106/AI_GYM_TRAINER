@@ -230,20 +230,34 @@ def main():
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration={
+            rtc_configuration = {
                 "iceServers": [
-                    {
-                        "urls": [
-                            "stun:stun.relay.metered.ca:80",
-                            "turn:turn.relay.metered.ca:80",
-                            "turn:turn.relay.metered.ca:443",
-                            "turns:turn.relay.metered.ca:443?transport=tcp",
-                        ],
-                        "username": "e495c6114fd351625f69cb9a",
-                        "credential": "XPdIU6fUYvE16tOL",
-                    }
-                ]
+            {
+            "urls": [
+                "stun:stun.relay.metered.ca:80",
+                "turn:turn.relay.metered.ca:80",
+                "turn:turn.relay.metered.ca:443",
+                "turns:turn.relay.metered.ca:443?transport=tcp",
+            ],
+            "username": st.secrets["METERED_USERNAME"],
+            "credential": st.secrets["METERED_CREDENTIAL"],
+            }
+            ]
             },
+            # rtc_configuration={
+            #     "iceServers": [
+            #         {
+            #             "urls": [
+            #                 "stun:stun.relay.metered.ca:80",
+            #                 "turn:turn.relay.metered.ca:80",
+            #                 "turn:turn.relay.metered.ca:443",
+            #                 "turns:turn.relay.metered.ca:443?transport=tcp",
+            #             ],
+            #             "username": "e495c6114fd351625f69cb9a",
+            #             "credential": "XPdIU6fUYvE16tOL",
+            #         }
+            #     ]
+            # },
             media_stream_constraints={
                 "video": True,
                 "audio": False,
