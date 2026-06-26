@@ -15,12 +15,15 @@ from groq import Groq
 from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline, autoplay_audio
+from dotenv import load_dotenv
+load_dotenv()
+
 
   
 def main():
     st.set_page_config(
         page_icon="🏋️‍♀️",
-        page_title="AI Real-time GYM Coach",
+        page_title="AI GYM Coach",
         initial_sidebar_state="expanded",
         layout="centered"
     )
@@ -52,7 +55,7 @@ def main():
     workout_started = st.session_state.get("workout_started", False)
     
     with st.sidebar:
-        st.title("🏋️‍♂️ Apna AI Coach")
+        st.title("🏋️‍♂️ AI Coach")
 
         if st.session_state.username:
             st.caption(f"👤 Login as {st.session_state.username}")
@@ -70,7 +73,7 @@ def main():
 
             st.markdown("")
 
-            start_session_button = st.button("Start Workout", width="stretch", key="start_session_button")
+            start_session_button = st.button("Start Workout", use_container_width=True, key="start_session_button")
 
             if start_session_button:
                 st.session_state.exercise_type = plan_exercise
@@ -101,7 +104,7 @@ def main():
 
             st.info(f"**{exercise}** -- {sets} Sets / {reps} Reps")
 
-            end_session_button = st.button("End Workout", key="end_session_button", width="stretch")
+            end_session_button = st.button("End Workout", key="end_session_button", use_container_width=True)
 
             if end_session_button:
                 st.session_state.workout_started = False
@@ -165,7 +168,7 @@ def main():
                 st.metric("Torso Angle", f"{st.session_state.torso_angle}°")
                 st.metric("Balance Status", st.session_state.balance_status)
 
-    st.title("AI Real-time GYM Coach")
+    st.title("AI GYM Coach")
     st.markdown("#### Real-time pose detection with proactive AI voice coaching")
  
     if st.session_state.get("audio_to_play"):
@@ -197,97 +200,25 @@ def main():
             unsafe_allow_html=True,
         )
     else:
-        context = None  # ensure context always exists
-
-    try:
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration={
-                "iceServers": [
-                    {"urls": ["stun:stun.l.google.com:19302"]},
-                    {
-                        "urls": "turn:turn.metered.ca:80",
-                        "username": "f6fdcd6f354ed44a3da13ac6",
-                        "credential": "yAWfBFfaEpBQqluq"
-                    }
-                ]
+            rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+            media_stream_constraints={
+                "video": True,
+                "audio": False
             },
-            media_stream_constraints={"video": True, "audio": False},
             async_processing=True
         )
-    except Exception as e:
-        st.error(f"WebRTC failed to start: {e}")
 
-    # ✅ Only call sync_metrics_update if context exists
-    if context and context.state.playing:
         sync_metrics_update(context)
-        time.sleep(0.25)
-        st.rerun()
 
-    inject_webrtc_styles()
+        if context.state.playing:
+            time.sleep(0.25)
+            st.rerun()
 
-    # else:
-    #     context = webrtc_streamer(
-    #     key="exercise-analysis",
-    #     mode=WebRtcMode.SENDRECV,
-    #     video_processor_factory=VideoProcessorClass,
-    #     rtc_configuration={
-    #         "iceServers": [
-    #             {"urls": ["stun:stun.l.google.com:19302"]},  # STUN
-    #             {
-    #                 "urls": "turn:turn.metered.ca:80",
-    #                 "username": "f6fdcd6f354ed44a3da13ac6",
-    #                 "credential": "yAWfBFfaEpBQqluq"
-    #             }
-    #         ]
-    #     },
-    #     media_stream_constraints={
-    #         "video": True,
-    #         "audio": False
-    #     },
-    #     async_processing=True
-    # )
-
-    # sync_metrics_update(context)
-
-    # if context.state.playing:
-    #     time.sleep(0.25)
-    #     st.rerun()
-
-    # inject_webrtc_styles()
-
-    # else:
-    #     context = webrtc_streamer(
-    #         key="exercise-analysis",
-    #         mode=WebRtcMode.SENDRECV,
-    #         video_processor_factory=VideoProcessorClass,
-    #         rtc_configuration={
-    #              "iceServers": [
-    #                 {"urls": ["stun:stun.l.google.com:19302"]},  # STUN
-    #                 {
-    #                         "urls": "turn:turn.metered.ca:80",
-    #                         "username": "f6fdcd6f354ed44a3da13ac6",
-    #                         "credential": "yAWfBFfaEpBQqluq"
-    #                 }
-    #                 ]
-    #             }
-    #         # rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-    #         media_stream_constraints={
-    #             "video": True,
-    #             "audio": False
-    #         },
-    #         async_processing=True
-    #     )
-
-    #     sync_metrics_update(context)
-
-    #     if context.state.playing:
-    #         time.sleep(0.25)
-    #         st.rerun()
-
-    #     inject_webrtc_styles()
+        inject_webrtc_styles()
 
     st.divider()
 
@@ -319,7 +250,7 @@ def main():
                 "Time (sec)": "sum"
             }).reset_index()
             agg_df.index += 1
-            st.table(agg_df, border="horizontal")
+            st.table(agg_df)
         else:
             st.info("No workout history found.")
 
