@@ -199,7 +199,8 @@ def main():
     #     """,
     #     unsafe_allow_html=True,
     # )
-    context = None
+        context = None
+
     if not workout_started:
         st.markdown(
             """
@@ -212,7 +213,9 @@ def main():
                 margin-top: 32px;
                 margin-bottom: 32px;
             ">
-                <h2 style="color:#ccc; margin-bottom:8px;">👈 Set your workout plan</h2>
+                <h2 style="color:#ccc; margin-bottom:8px;">
+                    👈 Set your workout plan
+                </h2>
                 <p style="font-size:1.05rem;">
                     Choose your exercise, sets and reps in the sidebar,<br>
                     then click <strong>Start Workout</strong> to activate the camera and AI coach.
@@ -221,39 +224,95 @@ def main():
             """,
             unsafe_allow_html=True,
         )
+
     else:
         context = webrtc_streamer(
-        key="exercise-analysis",
-        mode=WebRtcMode.SENDRECV,
-        video_processor_factory=VideoProcessorClass,
-        rtc_configuration={
-            "iceServers": [
-                {
-                    "urls": [
-                        "stun:stun.relay.metered.ca:80",
-                        "turn:turn.relay.metered.ca:80",
-                        "turn:turn.relay.metered.ca:443",
-                        "turns:turn.relay.metered.ca:443?transport=tcp",
-                    ],
-                    "username": "e495c6114fd351625f69cb9a",
-                    "credential": "XPdIU6fUYvE16tOL",
-                }
-            ]
-        },
-        media_stream_constraints={
-            "video": True,
-            "audio": False,
-        },
-        async_processing=True,
-    )
-if context is not None:
-    sync_metrics_update(context)
+            key="exercise-analysis",
+            mode=WebRtcMode.SENDRECV,
+            video_processor_factory=VideoProcessorClass,
+            rtc_configuration={
+                "iceServers": [
+                    {
+                        "urls": [
+                            "stun:stun.relay.metered.ca:80",
+                            "turn:turn.relay.metered.ca:80",
+                            "turn:turn.relay.metered.ca:443",
+                            "turns:turn.relay.metered.ca:443?transport=tcp",
+                        ],
+                        "username": "e495c6114fd351625f69cb9a",
+                        "credential": "XPdIU6fUYvE16tOL",
+                    }
+                ]
+            },
+            media_stream_constraints={
+                "video": True,
+                "audio": False,
+            },
+            async_processing=True,
+        )
 
-    if context.state.playing:
-        time.sleep(0.25)
-        st.rerun()
+        sync_metrics_update(context)
 
-    inject_webrtc_styles()
+        if context is not None and context.state.playing:
+            time.sleep(0.25)
+            st.rerun()
+
+        inject_webrtc_styles()
+#     context = None
+#     if not workout_started:
+#         st.markdown(
+#             """
+#             <div style="
+#                 border: 10px dashed #444;
+#                 border-radius: 0px;
+#                 padding: 48px 32px;
+#                 text-align: center;
+#                 color: #888;
+#                 margin-top: 32px;
+#                 margin-bottom: 32px;
+#             ">
+#                 <h2 style="color:#ccc; margin-bottom:8px;">👈 Set your workout plan</h2>
+#                 <p style="font-size:1.05rem;">
+#                     Choose your exercise, sets and reps in the sidebar,<br>
+#                     then click <strong>Start Workout</strong> to activate the camera and AI coach.
+#                 </p>
+#             </div>
+#             """,
+#             unsafe_allow_html=True,
+#         )
+#     else:
+#         context = webrtc_streamer(
+#         key="exercise-analysis",
+#         mode=WebRtcMode.SENDRECV,
+#         video_processor_factory=VideoProcessorClass,
+#         rtc_configuration={
+#             "iceServers": [
+#                 {
+#                     "urls": [
+#                         "stun:stun.relay.metered.ca:80",
+#                         "turn:turn.relay.metered.ca:80",
+#                         "turn:turn.relay.metered.ca:443",
+#                         "turns:turn.relay.metered.ca:443?transport=tcp",
+#                     ],
+#                     "username": "e495c6114fd351625f69cb9a",
+#                     "credential": "XPdIU6fUYvE16tOL",
+#                 }
+#             ]
+#         },
+#         media_stream_constraints={
+#             "video": True,
+#             "audio": False,
+#         },
+#         async_processing=True,
+#     )
+# if context is not None:
+#     sync_metrics_update(context)
+
+#     if context.state.playing:
+#         time.sleep(0.25)
+#         st.rerun()
+
+#     inject_webrtc_styles()
     # Update workout metrics
     # sync_metrics_update(context)
 
