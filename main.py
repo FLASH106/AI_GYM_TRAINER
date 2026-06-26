@@ -230,20 +230,25 @@ def main():
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration = {
-                "iceServers": [
-            {
-            "urls": [
-                "stun:stun.relay.metered.ca:80",
-                "turn:turn.relay.metered.ca:80",
-                "turn:turn.relay.metered.ca:443",
-                "turns:turn.relay.metered.ca:443?transport=tcp",
-            ],
-            "username": st.secrets["METERED_USERNAME"],
-            "credential": st.secrets["METERED_CREDENTIAL"],
-            }
-            ]
-            },
+             rtc_configuration={
+        "iceServers": [
+            {"urls": ["stun:stun.l.google.com:19302"]}
+        ]
+    },
+            # rtc_configuration = {
+            #     "iceServers": [
+            # {
+            # "urls": [
+            #     "stun:stun.relay.metered.ca:80",
+            #     "turn:turn.relay.metered.ca:80",
+            #     "turn:turn.relay.metered.ca:443",
+            #     "turns:turn.relay.metered.ca:443?transport=tcp",
+            # ],
+            # "username": st.secrets["METERED_USERNAME"],
+            # "credential": st.secrets["METERED_CREDENTIAL"],
+            # }
+            # ]
+            # },
             # rtc_configuration={
             #     "iceServers": [
             #         {
