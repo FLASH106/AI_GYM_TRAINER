@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+os.environ["MEDIAPIPE_DISABLE_GPU"] = "1"
 import time
 import pandas as pd
 from services.auth.login_wall import render_login_wall
